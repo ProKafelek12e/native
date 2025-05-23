@@ -15,7 +15,6 @@ export default function Index() {
 
     const handleClick = ()=>{
       pressed===false?setPressed(true):setPressed(false)
-      console.log("pressed",pressed)
     }
 
   return (
@@ -31,7 +30,7 @@ export default function Index() {
           </Pressable>
         ))}
         </View>
-        <Pressable onPress={()=>{handleClick()}} style={{backgroundColor:'#F207D8'}}><Text style={{fontSize:24,textAlign:"center", width:"100%"}}>Check</Text></Pressable>
+        <Pressable onPress={()=>{handleClick()}} style={{backgroundColor:'#F207D8'}}><Text style={{fontSize:24,textAlign:"center", width:"100%"}}>{pressed==false?"Check":"Hide"}</Text></Pressable>
     </View>
   );
 }
