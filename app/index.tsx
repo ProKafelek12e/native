@@ -1,37 +1,37 @@
 import { useState } from "react";
-import { Pressable, Text, View, TextInput } from "react-native";
-import { Plus } from "lucide-react-native"
+import { Pressable, Text, View } from "react-native"
 export default function Index() {
-  const [todo,setTodo] = useState<{title:string}[]>([])
-  const [input, setInput] = useState("")
+  const [chosen,setChosen] = useState<number>()
+  const [pressed,setPressed] = useState<boolean>(false)
+    const question = {
+      question:"How much is 2+2?",
+      answers:[
+        {content:"4", valid:true},
+        {content:"1", valid:false},
+        {content:"5", valid:false},
+        {content:"2", valid:false}
+      ]
+    }
 
-  
+    const handleClick = ()=>{
+      pressed===false?setPressed(true):setPressed(false)
+      console.log("pressed",pressed)
+    }
+
   return (
     <View style={{display:'flex',flexDirection:'column',height:"100%",gap:20}}>
       <View style={{display:'flex', flexDirection:'row',alignItems:"center",justifyContent:"space-between"}}>
-        <TextInput
-          onChangeText={setInput}
-          value={input}
-          style={{
-            height: 40,
-            margin: 12,
-            borderWidth: 1,
-            padding: 10,
-            width:"70%"
-          }}
-          />
-          <View style={{width:"20%",height:40}}>
-        <Pressable onPress={()=>{setTodo([...todo,{title:input}]);setInput("")}} style={{backgroundColor:"skyblue"}}>
-          <Text style={{display:"flex", flexDirection:"row"}}>Add</Text> <Plus color="red" size={23}/>
-        </Pressable>
-          </View>
+        <Text style={{fontSize:24,textAlign:"center", width:"100%"}}>{question.question}</Text>
       </View>
-      <View style={{paddingHorizontal:20}}>
+      <View style={{paddingHorizontal:20, display:"flex",flexDirection:"column",gap:8}}>
 
-        {todo.map((item, idx) => (
-          <Text key={idx}>{item.title}</Text>
+        {question.answers.map((item, idx) => (
+          <Pressable style={pressed==true&&chosen==idx?item.valid?{borderColor:'green',borderWidth:2,borderRadius:6, padding:8}:{borderColor:'red',borderWidth:2,borderRadius:6, padding:8}:{borderColor:'gray',borderWidth:2,borderRadius:6, padding:8}} key={idx} onPress={()=>{setChosen(idx)}}>
+            <Text>{item.content}</Text>
+          </Pressable>
         ))}
         </View>
+        <Pressable onPress={()=>{handleClick()}} style={{backgroundColor:'#F207D8'}}><Text style={{fontSize:24,textAlign:"center", width:"100%"}}>Check</Text></Pressable>
     </View>
   );
 }
