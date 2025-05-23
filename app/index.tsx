@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Button, Text, View, TextInput } from "react-native";
-
+import { Pressable, Text, View, TextInput } from "react-native";
+import { Plus } from "lucide-react-native"
 export default function Index() {
-
   const [todo,setTodo] = useState<{title:string}[]>([])
   const [input, setInput] = useState("")
+
+  
   return (
     <View style={{display:'flex',flexDirection:'column',height:"100%",gap:20}}>
       <View style={{display:'flex', flexDirection:'row',alignItems:"center",justifyContent:"space-between"}}>
@@ -20,7 +21,9 @@ export default function Index() {
           }}
           />
           <View style={{width:"20%",height:40}}>
-        <Button title="add" onPress={()=>{setTodo([...todo,{title:input}]);setInput("")}}></Button>
+        <Pressable onPress={()=>{setTodo([...todo,{title:input}]);setInput("")}} style={{backgroundColor:"skyblue"}}>
+          <Text style={{display:"flex", flexDirection:"row"}}>Add</Text> <Plus color="red" size={23}/>
+        </Pressable>
           </View>
       </View>
       <View style={{paddingHorizontal:20}}>
