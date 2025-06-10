@@ -1,43 +1,75 @@
-"use client"
-import { useEffect, useState } from "react";
-import { FlatList, Image, Text, View } from "react-native"
-import { Link } from 'expo-router';
-export default function Index() {
-  const [data,setData] = useState();
-  useEffect(()=>{
-    const getData = async ()=>{
-      const request = await fetch(`https://restcountries.com/v3.1/all`)
-      const formatted = await request.json()
-      console.log("pobrane")
-      setData(formatted)
+import * as React from 'react';
+import { View, FlatList, StyleSheet } from 'react-native';
+import { Provider as PaperProvider, Card, Text, Button, TextInput, Title } from 'react-native-paper';
+
+export default function App() {
+  const [task, setTask] = React.useState('');
+  const [tasks, setTasks] = React.useState(['wbić 10 lvl faceit', 'Zdać z geografii']);
+
+  const addTask = () => {
+    if (task.trim()) {
+      setTasks(prev => [...prev, task]);
+      setTask('');
     }
-    getData()
-  },[])
-  return(
-    <View style={{display:"flex",flexDirection:"row",flexWrap:"wrap",justifyContent:"center",alignItems:"center",width:"100%"}}>
-      <Text>test</Text>
-      <FlatList
-        data={data}
-        renderItem={({item}) => <Item item={item} />}
-        keyExtractor={item => item?.ccn3}
-        numColumns={4}
-        contentContainerStyle={{gap:20,}}
-        columnWrapperStyle={{gap:20,flex:1,justifyContent:"center"}}
-      />      
-    </View>
+  };
+
+  return (
+    <PaperProvider>
+      <View style={styles.container}>
+        <Card style={styles.card}>
+          <Card.Title title="Jacek Kublik" subtitle="10lvl wannabe" />
+          <Card.Content>
+            <Text>Masz {tasks.length} zadań na dziś</Text>
+          </Card.Content>
+        </Card>
+
+        <TextInput
+          label="Nowe zadanie"
+          value={task}
+          onChangeText={setTask}
+          mode="outlined"
+          style={styles.input}
+        />
+        <Button mode="contained" onPress={addTask} style={styles.button}>
+          Dodaj zadanie
+        </Button>
+
+        <Title style={styles.title}>Lista zadań</Title>
+        <FlatList
+          data={tasks}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item, index }) => (
+            <Card style={styles.taskCard}>
+              <Card.Content>
+                <Text>{index + 1}. {item}</Text>
+              </Card.Content>
+            </Card>
+          )}
+        />
+      </View>
+    </PaperProvider>
   );
 }
 
-function Item({item}){
-  const kod = item.cca2
-  return (
-      <Link href={{
-        pathname:`/country/${kod}`,
-      }}>
-        <Image
-          style={{width:80,height:50,backgroundColor:'gray'}}
-          source={{uri:item?.flags?.png}}       
-        />
-      </Link>
-  )
-}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#fff',
+  },
+  card: {
+    marginBottom: 16,
+  },
+  input: {
+    marginBottom: 8,
+  },
+  button: {
+    marginBottom: 16,
+  },
+  title: {
+    marginBottom: 8,
+  },
+  taskCard: {
+    marginBottom: 8,
+  },
+});
